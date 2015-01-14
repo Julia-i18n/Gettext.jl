@@ -18,7 +18,7 @@ A simple string can be translated as follows:
 
 In fact, such a sample program can be run from the toplevel directory of this repository as follows:
 
-    $ LANGUAGE=fr julia progname.jl
+    $ LANGUAGE=fr julia helloworld.jl
     Bonjour le monde !
 
 ## String interpolation
