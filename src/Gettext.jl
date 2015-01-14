@@ -17,9 +17,13 @@ dngettext(domain, singular, plural, n) = gt.dngettext(domain, singular, plural, 
 ldngettext(domain, singular, plural, n) = gt.ldngettext(domain, singular, plural, n)
 
 macro __str(s)
-  gettext(s)
+    gettext(s)
 end
 
-export bindtextdomain, textdomain, gettext, lgettext, dgettext, dlgettext, ngettext, lngettext, dngettext, ldngettext, @__str
+macro N__str(s)
+    s
+end
+
+export bindtextdomain, textdomain, gettext, lgettext, dgettext, dlgettext, ngettext, lngettext, dngettext, ldngettext, @__str, @N__str
 
 end # module
