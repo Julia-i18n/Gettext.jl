@@ -5,7 +5,7 @@ An interface to the [gettext](http://www.gnu.org/software/gettext/manual/html_no
 
 ## Installation
 
-    Within Julia, run `Pkg.clone("https://github.com/garrison/Gettext.jl.git")`
+Within Julia, run `Pkg.clone("https://github.com/garrison/Gettext.jl.git")`
 
 ## Usage
 
@@ -31,4 +31,4 @@ Currently this library relies on Python's built-in [gettext.py](https://github.c
 
 ## Author
 
-This package was written [by Jim Garrison](http://jimgarrison.org/)
+This package was written [by Jim Garrison](http://jimgarrison.org/).
