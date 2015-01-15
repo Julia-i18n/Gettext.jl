@@ -12,8 +12,10 @@ Within Julia, run `Pkg.update()` and then `Pkg.add("Gettext")`
 A simple string can be translated as follows:
 
     using Gettext
+
     bindtextdomain("sample", "po/")
     textdomain("sample")
+
     println(_"Hello, world!")
 
 In fact, such a sample program can be run from the toplevel directory of this repository as follows:
