@@ -23,7 +23,24 @@ In fact, such a sample program can be run from the toplevel directory of this re
 
 ## String interpolation
 
-For string interpolation, you will need to use a runtime method (e.g. [Formatting.jl](https://github.com/lindahua/Formatting.jl)) rather than Julia's built-in compile-time interpolation syntax.  If using Formatting.jl, it probably makes sense to use the "Python" formatting style, as it allows the translations to have different argument orders than the original strings.
+For string interpolation, you will need to use a runtime method (e.g. [Formatting.jl](https://github.com/lindahua/Formatting.jl)) rather than Julia's built-in compile-time interpolation syntax.  If using Formatting.jl, it probably makes sense to use the "Python" formatting style, as it allows the translations to have different argument orders than the original strings.  For example,
+
+    using Gettext
+    using Formatting
+
+    bindtextdomain("sample", "po/")
+    textdomain("sample")
+
+    daystr(n) = format(ngettext("{1} day", "{1} days", n), n)
+
+    println(daystr(1))
+    println(daystr(3))
+
+When run, this gives
+
+    $ LANGUAGE=fr julia daystr.jl
+    1 jour
+    3 jours
 
 ## Status
 
