@@ -1,5 +1,6 @@
 # Gettext.jl
 [![Build Status](https://travis-ci.org/garrison/Gettext.jl.svg)](https://travis-ci.org/garrison/Gettext.jl)
+[![Coverage Status](https://coveralls.io/repos/garrison/Gettext.jl/badge.svg?branch=master)](https://coveralls.io/r/garrison/Gettext.jl?branch=master)
 
 An interface to the [gettext](http://www.gnu.org/software/gettext/manual/html_node/index.html) internationalization/translation interface.
 
