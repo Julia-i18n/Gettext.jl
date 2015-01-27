@@ -8,11 +8,7 @@ using Base.Test
 using Formatting
 
 # Set up gettext
-#
-# NOTE: The following assumes this file is run from the Gettext/test
-# directory.  This will indeed be true if run using
-# `Pkg.test("Gettext")`.
-trdir = realpath(joinpath("..", "po"))
+trdir = realpath(joinpath(Pkg.dir("Gettext"), "po"))
 @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
 bindtextdomain("sample", trdir)
 textdomain("sample")
