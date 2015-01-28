@@ -22,6 +22,10 @@ daystr(n) = format(ngettext("{1} day", "{1} days", n), n)
 @test daystr(1) == "1 jour"
 @test daystr(3) == "3 jours"
 
+# Test dgettext and dngettext
+@test dgettext("sample", "Hello, world!") == "Bonjour le monde !"
+@test dngettext("sample", "{1} day", "{1} days", 1) == "{1} jour"
+
 # Set the language back to normal.
 if old_language != nothing
     ENV["LANGUAGE"] = old_language
