@@ -1,7 +1,6 @@
 # Gettext.jl
 [![Build Status](https://travis-ci.org/garrison/Gettext.jl.svg)](https://travis-ci.org/garrison/Gettext.jl)
 [![Coverage Status](https://coveralls.io/repos/garrison/Gettext.jl/badge.svg?branch=master)](https://coveralls.io/r/garrison/Gettext.jl?branch=master)
-[![Gettext](http://pkg.julialang.org/badges/Gettext_release.svg)](http://pkg.julialang.org/?pkg=Gettext&ver=release)
 
 An interface to the [gettext](http://www.gnu.org/software/gettext/manual/html_node/index.html) internationalization/translation interface.
 
@@ -48,8 +47,4 @@ When run, this gives
 
 ## Status
 
-Currently this library relies on Python's built-in [gettext.py](https://github.com/python/cpython/blob/master/Lib/gettext.py) implementation via [PyCall](https://github.com/stevengj/PyCall.jl).  In the future, it may make sense to port this code into a Julia-native version (see [issue #1](https://github.com/garrison/Gettext.jl/issues/1)).
-
-## Author
-
-This package was written by [Jim Garrison](http://jimgarrison.org/).
+Currently this library relies on Python's built-in [gettext.py](https://github.com/python/cpython/blob/master/Lib/gettext.py) implementation via [PyCall](https://github.com/stevengj/PyCall.jl).  In the future, it may make sense to port this code into a Julia-native version (see [issue #1](https://github.com/Julia-i18n/Gettext.jl/issues/1)).
