@@ -2,15 +2,19 @@ module Gettext
 
 using PyCall
 
-@pyimport gettext as gt
+const gt = PyNULL()
 
-bindtextdomain(domain, localedir=nothing) = gt.bindtextdomain(domain, localedir)
-textdomain(domain=nothing) = gt.textdomain(domain)
+function __init__()
+    copy!(gt, pyimport("gettext"))
+end
 
-gettext(message) = gt.gettext(message)
-dgettext(domain, message) = gt.dgettext(domain, message)
-ngettext(singular, plural, n) = gt.ngettext(singular, plural, n)
-dngettext(domain, singular, plural, n) = gt.dngettext(domain, singular, plural, n)
+bindtextdomain(domain, localedir=nothing) = gt[:bindtextdomain](domain, localedir)
+textdomain(domain=nothing) = gt[:textdomain](domain)
+
+gettext(message) = gt[:gettext](message)
+dgettext(domain, message) = gt[:dgettext](domain, message)
+ngettext(singular, plural, n) = gt[:ngettext](singular, plural, n)
+dngettext(domain, singular, plural, n) = gt[:dngettext](domain, singular, plural, n)
 
 macro __str(s)
     gettext(s)
