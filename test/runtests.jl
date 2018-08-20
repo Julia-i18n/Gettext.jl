@@ -4,11 +4,12 @@ old_language = get(ENV, "LANGUAGE", nothing)
 ENV["LANGUAGE"] = "fr"
 
 using Gettext
-using Base.Test
+using Test
 using Formatting
+import Pkg
 
 # Set up gettext
-trdir = realpath(joinpath(Pkg.dir("Gettext"), "po"))
+trdir = realpath(joinpath(dirname(pathof(Gettext)), "..", "po"))
 @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
 bindtextdomain("sample", trdir)
 textdomain("sample")
