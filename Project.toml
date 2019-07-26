@@ -1,0 +1,16 @@
+name = "Gettext"
+uuid = "a6aca261-61b0-5b33-a99a-e9c977ffa089"
+
+[deps]
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+
+[compat]
+julia = "≥ 0.7.0"
+
+[extras]
+Formatting = "59287772-0a20-5a39-b81b-1366585eb4c0"
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Pkg", "Test", "Formatting"]
