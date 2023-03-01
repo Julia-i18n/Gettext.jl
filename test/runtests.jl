@@ -20,6 +20,8 @@ textdomain("sample")
 @test _"Hello, world!" == "Bonjour le monde !"
 @test N_"Hello, world!" == "Hello, world!"
 
+@test _"Unknown key" == "Unknown key"
+
 # Test ngettext
 daystr(n) = format(ngettext("{1} day", "{1} days", n), n)
 @test daystr(1) == "1 jour"
