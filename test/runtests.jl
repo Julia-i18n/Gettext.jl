@@ -9,10 +9,12 @@ using Formatting
 import Pkg
 
 # Set up gettext
-trdir = realpath(joinpath(dirname(pathof(Gettext)), "..", "po"))
+trdir = joinpath(@__DIR__, "..", "po")
 @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
 bindtextdomain("sample", trdir)
 textdomain("sample")
+@test bindtextdomain("sample") == trdir
+@test textdomain() == "sample"
 
 # Test basic macros
 @test _"Hello, world!" == "Bonjour le monde !"
