@@ -22,17 +22,11 @@ function bindtextdomain(domain::AbstractString, dir_name::AbstractString)
     return dir_name
 end
 
-# like unsafe_string, but throws KeyError if ptr == NULL
-function _unsafe_string_checknull(key, ptr)
-    ptr == C_NULL && throw(KeyError(key))
-    return unsafe_string(ptr)
-end
+gettext(msgid::AbstractString) = unsafe_string(ccall((:gettext,libgettext), Cstring, (Cstring,), msgid))
+dgettext(domain::AbstractString, msgid::AbstractString) = unsafe_string(ccall((:dgettext,libgettext), Cstring, (Cstring, Cstring,), domain, msgid))
 
-gettext(msgid::AbstractString) = _unsafe_string_checknull(msgid, ccall((:gettext,libgettext), Cstring, (Cstring,), msgid))
-dgettext(domain::AbstractString, msgid::AbstractString) = _unsafe_string_checknull((domain,msgid), ccall((:dgettext,libgettext), Cstring, (Cstring, Cstring,), domain, msgid))
-
-ngettext(msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = _unsafe_string_checknull((msgid,msgid_plural,n), ccall((:ngettext,libgettext), Cstring, (Cstring,Cstring,Culong), msgid, msgid_plural, n))
-dngettext(domain::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = _unsafe_string_checknull((domain,msgid,msgid_plural,n), ccall((:dngettext,libgettext), Cstring, (Cstring,Cstring,Cstring,Culong), domain, msgid, msgid_plural, n))
+ngettext(msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = unsafe_string(ccall((:ngettext,libgettext), Cstring, (Cstring,Cstring,Culong), msgid, msgid_plural, n))
+dngettext(domain::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = unsafe_string(ccall((:dngettext,libgettext), Cstring, (Cstring,Cstring,Cstring,Culong), domain, msgid, msgid_plural, n))
 
 macro __str(s)
     gettext(s)
