@@ -1,6 +1,6 @@
 # Gettext.jl
-[![Build Status](https://travis-ci.org/Julia-i18n/Gettext.jl.svg)](https://travis-ci.org/Julia-i18n/Gettext.jl)
-[![Coverage Status](https://coveralls.io/repos/Julia-i18n/Gettext.jl/badge.svg?branch=master)](https://coveralls.io/r/Julia-i18n/Gettext.jl?branch=master)
+[![CI](https://github.com/Julia-i18n/Gettext.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/Julia-i18n/Gettext.jl/actions/workflows/CI.yml?query=branch%3Amaster)
+[![Codecov](https://codecov.io/Julia-i18n/Gettext.jl/branch/master/graph/badge.svg?token=WsGRSymBmZ)](https://codecov.io/gh/Julia-i18n/Gettext.jl)
 
 An interface to the [gettext](http://www.gnu.org/software/gettext/manual/html_node/index.html) internationalization/translation interface.
 
