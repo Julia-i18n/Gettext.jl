@@ -14,11 +14,7 @@ bindtextdomain(domain::AbstractString) = unsafe_string(ccall((:bindtextdomain,li
 function bindtextdomain(domain::AbstractString, dir_name::AbstractString)
     # bintextdomain(domain, dir_name) returns the dir_name as a string, but
     # you are required to not free the result.  Might as well ignore it.
-    @static if Sys.iswindows()
-        ccall((:wbindtextdomain,libintl), Cwstring, (Cstring,Cwstring), domain, dir_name)
-    else
-        ccall((:bindtextdomain,libintl), Cstring, (Cstring,Cstring), domain, dir_name)
-    end
+    ccall((:bindtextdomain,libintl), Cstring, (Cstring,Cstring), domain, dir_name)
     return dir_name
 end
 
