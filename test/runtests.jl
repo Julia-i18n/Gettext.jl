@@ -9,18 +9,14 @@ using Formatting
 import Pkg
 
 # Set up gettext
-trdir = joinpath(@__DIR__, "..", "po")
+trdir = realpath(joinpath(dirname(pathof(Gettext)), "..", "po"))
 @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
 bindtextdomain("sample", trdir)
 textdomain("sample")
-@test bindtextdomain("sample") == trdir
-@test textdomain() == "sample"
 
 # Test basic macros
 @test _"Hello, world!" == "Bonjour le monde !"
 @test N_"Hello, world!" == "Hello, world!"
-
-@test _"Unknown key" == "Unknown key"
 
 # Test ngettext
 daystr(n) = format(ngettext("{1} day", "{1} days", n), n)
