@@ -8,32 +8,47 @@ using Test
 using Formatting
 import Pkg
 
-# Set up gettext
-trdir = joinpath(@__DIR__, "..", "po")
-@test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
-bindtextdomain("sample", trdir)
-textdomain("sample")
-@test bindtextdomain("sample") == trdir
-@test textdomain() == "sample"
+# set up a temporary Unicode pathname with a po file,
+# to make sure that we support Unicode directory names
+tmpdir = mktempdir()
+try
+    trdir = mkpath(joinpath(tmpdir, "ünicøde🐨", "po"))
+    podir = mkpath(joinpath(trdir, "fr", "LC_MESSAGES"))
+    pkg_podir = joinpath(@__DIR__, "..", "po", "fr", "LC_MESSAGES")
+    for file in ["sample.mo", "sample.po"]
+        cp(joinpath(pkg_podir, file), joinpath(podir, file))
+    end
+    trdir = joinpath(@__DIR__, "..", "po")
 
-# Test basic macros
-@test _"Hello, world!" == "Bonjour le monde !"
-@test N_"Hello, world!" == "Hello, world!"
+    # Set up gettext
+    @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
+    bindtextdomain("sample", trdir)
+    textdomain("sample")
+    @test bindtextdomain("sample") == trdir
+    @test textdomain() == "sample"
 
-@test _"Unknown key" == "Unknown key"
+    # Test basic macros
+    @test _"Hello, world!" == "Bonjour le monde !"
+    @test N_"Hello, world!" == "Hello, world!"
 
-# Test ngettext
-daystr(n) = format(ngettext("{1} day", "{1} days", n), n)
-@test daystr(1) == "1 jour"
-@test daystr(3) == "3 jours"
+    @test _"Unknown key" == "Unknown key"
 
-# Test dgettext and dngettext
-@test dgettext("sample", "Hello, world!") == "Bonjour le monde !"
-@test dngettext("sample", "{1} day", "{1} days", 1) == "{1} jour"
+    # Test ngettext
+    daystr(n) = format(ngettext("{1} day", "{1} days", n), n)
+    @test daystr(1) == "1 jour"
+    @test daystr(3) == "3 jours"
 
-# Set the language back to normal.
-if old_language != nothing
-    ENV["LANGUAGE"] = old_language
-else
-    pop!(ENV, "LANGUAGE")
+    # Test dgettext and dngettext
+    @test dgettext("sample", "Hello, world!") == "Bonjour le monde !"
+    @test dngettext("sample", "{1} day", "{1} days", 1) == "{1} jour"
+
+finally
+    # Set the language back to normal.
+    if old_language !== nothing
+        ENV["LANGUAGE"] = old_language
+    else
+        pop!(ENV, "LANGUAGE")
+    end
+
+    rm(tmpdir, recursive=true)
 end
