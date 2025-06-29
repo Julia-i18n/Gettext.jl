@@ -29,11 +29,11 @@ ngettext(msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = unsa
 dngettext(domain::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = unsafe_string(ccall((:dngettext,libintl), Cstring, (Cstring,Cstring,Cstring,Culong), domain, msgid, msgid_plural, n))
 
 macro __str(s)
-    gettext(s)
+    :(gettext($(esc(s))))
 end
 
 macro N__str(s)
-    s
+    :($(esc(s)))
 end
 
 export bindtextdomain, textdomain, gettext, dgettext, ngettext, dngettext, @__str, @N__str
