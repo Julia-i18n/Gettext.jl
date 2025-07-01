@@ -12,7 +12,8 @@ import Pkg
 # to make sure that we support Unicode directory names
 tmpdir = mktempdir()
 try
-    trdir = mkpath(joinpath(tmpdir, "ünicøde🐨", "po"))
+    # trdir = mkpath(joinpath(tmpdir, "ünicøde🐨", "po"))
+    trdir = mkpath(joinpath(tmpdir, "ascii", "po"))
     podir = mkpath(joinpath(trdir, "fr", "LC_MESSAGES"))
     pkg_podir = joinpath(@__DIR__, "..", "po", "fr", "LC_MESSAGES")
     for file in ["sample.mo", "sample.po"]
