@@ -19,7 +19,7 @@ try
     for file in ["sample.mo", "sample.po"]
         cp(joinpath(pkg_podir, file), joinpath(podir, file))
     end
-    trdir = joinpath(@__DIR__, "..", "po")
+    # trdir = joinpath(@__DIR__, "..", "po")
 
     # Set up gettext
     @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
