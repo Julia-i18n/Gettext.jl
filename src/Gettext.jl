@@ -10,11 +10,22 @@ function textdomain(domain::AbstractString)
     return domain
 end
 
-bindtextdomain(domain::AbstractString) = unsafe_string(ccall((:bindtextdomain,libintl), Cstring, (Cstring, Ptr{UInt8},), domain, C_NULL))
+function bindtextdomain(domain::AbstractString)
+    @static if Sys.iswindows()
+        return unsafe_string(ccall((:libintl_wbindtextdomain,libintl), Cwstring, (Cstring, Ptr{Cwchar_t}), domain, C_NULL))
+    else
+        return unsafe_string(ccall((:bindtextdomain,libintl), Cstring, (Cstring, Ptr{UInt8},), domain, C_NULL))
+    end
+end
+
 function bindtextdomain(domain::AbstractString, dir_name::AbstractString)
     # bintextdomain(domain, dir_name) returns the dir_name as a string, but
     # you are required to not free the result.  Might as well ignore it.
-    ccall((:bindtextdomain,libintl), Cstring, (Cstring,Cstring), domain, dir_name)
+    @static if Sys.iswindows()
+        ccall((:libintl_wbindtextdomain,libintl), Cwstring, (Cstring,Cwstring), domain, dir_name)
+    else
+        ccall((:bindtextdomain,libintl), Cstring, (Cstring,Cstring), domain, dir_name)
+    end
     return dir_name
 end
 
