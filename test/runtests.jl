@@ -2,7 +2,7 @@
 # and LANG accordingly.
 old_language = get(ENV, "LANGUAGE", nothing)
 old_lang = get(ENV, "LANG", nothing)
-ENV["LANG"] = ENV["LANGUAGE"] = "fr"
+ENV["LANG"] = ENV["LANGUAGE"] = "fr_FR"
 
 using Gettext
 using Test
