@@ -4,7 +4,7 @@
 
 An interface to the [gettext](http://www.gnu.org/software/gettext/manual/html_node/index.html) internationalization/translation interface.
 
-(This package calls the GNU `gettext` library directly from Julia, via the `Gettext_jll` package compiled for Julia
+(This package calls the GNU `gettext` library directly from Julia, via the `GettextRuntime_jll` package compiled for Julia
 by [Yggdrasil](https://github.com/JuliaPackaging/Yggdrasil); this is automatically installed for you by Julia's
 [package manager](https://github.com/JuliaLang/Pkg.jl).  `gettext` is free/open-source software licensed under the
 [GNU LGPL](https://www.gnu.org/software/gettext/manual/html_node/GNU-LGPL.html).)
