@@ -3,6 +3,7 @@ using Test
 using Formatting
 import Pkg
 
+# for debugging LC_ALL value:
 if !isnothing(Sys.which("cc"))
     prog = tempname()
     src = tempname() * ".c"
@@ -15,18 +16,21 @@ if !isnothing(Sys.which("cc"))
     @show readchomp(`$prog`)
 end
 
+# Our tests attempt translating strings to French, so set the LANGUAGE
+# etcetera accordingly.
+
+# Windows, of course, uses its own mechanism to set locale
 @static if Sys.iswindows()
     fr_FR = 0x040C # LCID for fr_FR
+    old_LCID = ccall(:GetThreadLocale, stdcall, UInt32, ())
     ccall(:SetThreadLocale, stdcall, Cint, (UInt32,), fr_FR)
 end
 
-# Our tests attempt translating strings to French, so set the LANGUAGE
-# and LANG accordingly.
 old_language = get(ENV, "LANGUAGE", nothing)
 old_lang = get(ENV, "LANG", nothing)
 @show old_locale = Gettext.getlocale()
 ENV["LANG"] = ENV["LANGUAGE"] = "fr_FR"
-@show Gettext.setlocale("")
+@show Gettext.setlocale()
 
 # set up a temporary Unicode pathname with a po file,
 # to make sure that we support Unicode directory names
@@ -65,6 +69,9 @@ try
 
 finally
     # Set the language back to normal.
+    @static if Sys.iswindows()
+        ccall(:SetThreadLocale, stdcall, Cint, (UInt32,), old_LCID)
+    end
     if old_language !== nothing
         ENV["LANGUAGE"] = old_language
     else
