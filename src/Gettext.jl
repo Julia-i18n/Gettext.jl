@@ -2,10 +2,17 @@ module Gettext
 
 using GettextRuntime_jll
 
+const LC_ALL = zero(Cint)
+function setlocale(locale::AbstractString="")
+    ret = ccall(:setlocale, Ptr{UInt8}, (Cint, Cstring), LC_ALL, "")
+    ret == C_NULL && throw(ArgumentError("invalid locale $locale"))
+    return unsafe_string(ret)
+end
+
+
 function __init__()
     # initialize locale from environment
-    LC_ALL = zero(Cint)
-    ccall(:setlocale, Cstring, (Cint, Cstring), LC_ALL, "")
+    setlocale()
 end
 
 textdomain() = unsafe_string(ccall((:libintl_textdomain,libintl), Cstring, (Ptr{UInt8},), C_NULL))

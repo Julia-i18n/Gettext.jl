@@ -1,13 +1,14 @@
+using Gettext
+using Test
+using Formatting
+import Pkg
+
 # Our tests attempt translating strings to French, so set the LANGUAGE
 # and LANG accordingly.
 old_language = get(ENV, "LANGUAGE", nothing)
 old_lang = get(ENV, "LANG", nothing)
 ENV["LANG"] = ENV["LANGUAGE"] = "fr_FR"
-
-using Gettext
-using Test
-using Formatting
-import Pkg
+@show Gettext.setlocale()
 
 # set up a temporary Unicode pathname with a po file,
 # to make sure that we support Unicode directory names
@@ -56,6 +57,7 @@ finally
     else
         pop!(ENV, "LANG")
     end
+    Gettext.setlocale()
 
     rm(tmpdir, recursive=true)
 end
