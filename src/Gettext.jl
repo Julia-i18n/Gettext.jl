@@ -26,6 +26,7 @@ function bindtextdomain(domain::AbstractString, dir_name::AbstractString)
     else
         ccall((:libintl_bindtextdomain,libintl), Cstring, (Cstring,Cstring), domain, dir_name)
     end
+    ccall((:libintl_bind_textdomain_codeset,libintl), Cstring, (Cstring,Cstring), domain, "UTF-8")
     return dir_name
 end
 
