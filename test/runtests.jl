@@ -9,8 +9,6 @@ using Test
 using Formatting
 import Pkg
 
-print("==========================\n", ENV, "\n==========================\n")
-
 # set up a temporary Unicode pathname with a po file,
 # to make sure that we support Unicode directory names
 tmpdir = mktempdir()

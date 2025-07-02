@@ -2,6 +2,12 @@ module Gettext
 
 using GettextRuntime_jll
 
+function __init__()
+    # initialize locale from environment
+    LC_ALL = zero(Cint)
+    ccall((:libintl_setlocale,libintl), Cstring, (Cint, Cstring), LC_ALL, "")
+end
+
 textdomain() = unsafe_string(ccall((:libintl_textdomain,libintl), Cstring, (Ptr{UInt8},), C_NULL))
 function textdomain(domain::AbstractString)
     # textdomain(domain) returns the domain as a string, but
