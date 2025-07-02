@@ -1,7 +1,8 @@
 # Our tests attempt translating strings to French, so set the LANGUAGE
-# accordingly.
+# and LANG accordingly.
 old_language = get(ENV, "LANGUAGE", nothing)
-ENV["LANGUAGE"] = "fr"
+old_lang = get(ENV, "LANG", nothing)
+ENV["LANG"] = ENV["LANGUAGE"] = "fr"
 
 using Gettext
 using Test
@@ -49,6 +50,11 @@ finally
         ENV["LANGUAGE"] = old_language
     else
         pop!(ENV, "LANGUAGE")
+    end
+    if old_lang !== nothing
+        ENV["LANG"] = old_lang
+    else
+        pop!(ENV, "LANG")
     end
 
     rm(tmpdir, recursive=true)
