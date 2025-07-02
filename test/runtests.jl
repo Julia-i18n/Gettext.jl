@@ -21,14 +21,12 @@ ENV["LANG"] = ENV["LANGUAGE"] = "fr_FR"
 # to make sure that we support Unicode directory names
 tmpdir = mktempdir()
 try
-    # trdir = mkpath(joinpath(tmpdir, "ünicøde🐨", "po"))
-    trdir = mkpath(joinpath(tmpdir, "ascii", "po"))
+    trdir = mkpath(joinpath(tmpdir, "ünicøde🐨", "po"))
     podir = mkpath(joinpath(trdir, "fr", "LC_MESSAGES"))
     pkg_podir = joinpath(@__DIR__, "..", "po", "fr", "LC_MESSAGES")
     for file in ["sample.mo", "sample.po"]
         cp(joinpath(pkg_podir, file), joinpath(podir, file))
     end
-    # trdir = joinpath(@__DIR__, "..", "po")
 
     # Set up gettext
     @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
