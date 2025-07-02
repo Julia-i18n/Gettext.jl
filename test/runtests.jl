@@ -15,13 +15,18 @@ if !isnothing(Sys.which("cc"))
     @show readchomp(`$prog`)
 end
 
+@static if Sys.iswindows()
+    fr_FR = 0x040C # LCID for fr_FR
+    ccall(:SetThreadLocale, Cint, (UInt32,), fr_FR)
+end
+
 # Our tests attempt translating strings to French, so set the LANGUAGE
 # and LANG accordingly.
 old_language = get(ENV, "LANGUAGE", nothing)
 old_lang = get(ENV, "LANG", nothing)
 @show old_locale = Gettext.getlocale()
 ENV["LANG"] = ENV["LANGUAGE"] = "fr_FR"
-@show Gettext.setlocale("fr_FR.UTF-8")
+@show Gettext.setlocale("")
 
 # set up a temporary Unicode pathname with a po file,
 # to make sure that we support Unicode directory names
