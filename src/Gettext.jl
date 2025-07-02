@@ -2,7 +2,7 @@ module Gettext
 
 using GettextRuntime_jll
 
-const LC_ALL = zero(Cint)
+const LC_ALL = Sys.islinux() ? 6 : 0
 function setlocale(locale::AbstractString="")
     ret = ccall(:setlocale, Ptr{UInt8}, (Cint, Cstring), LC_ALL, "")
     ret == C_NULL && throw(ArgumentError("invalid locale $locale"))
