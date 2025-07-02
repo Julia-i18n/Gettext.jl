@@ -3,12 +3,25 @@ using Test
 using Formatting
 import Pkg
 
+if !isnothing(Sys.which("cc"))
+    prog = tempname()
+    src = tempname() * ".c"
+    write(src, """
+        #include <locale.h>
+        #include <stdio.h>
+        int main(void) { printf("LC_ALL = %d\\n", LC_ALL); return 0; }
+        """)
+    run(`cc -o $prog $src`)
+    @show readchomp(`$prog`)
+end
+
 # Our tests attempt translating strings to French, so set the LANGUAGE
 # and LANG accordingly.
 old_language = get(ENV, "LANGUAGE", nothing)
 old_lang = get(ENV, "LANG", nothing)
+@show old_locale = Gettext.getlocale()
 ENV["LANG"] = ENV["LANGUAGE"] = "fr_FR"
-@show Gettext.setlocale()
+@show Gettext.setlocale("fr_FR")
 
 # set up a temporary Unicode pathname with a po file,
 # to make sure that we support Unicode directory names
@@ -57,7 +70,7 @@ finally
     else
         pop!(ENV, "LANG")
     end
-    Gettext.setlocale()
+    Gettext.setlocale(old_locale)
 
     rm(tmpdir, recursive=true)
 end
