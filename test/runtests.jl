@@ -17,7 +17,7 @@ end
 
 @static if Sys.iswindows()
     fr_FR = 0x040C # LCID for fr_FR
-    ccall(:SetThreadLocale, Cint, (UInt32,), fr_FR)
+    ccall(:SetThreadLocale, stdcall, Cint, (UInt32,), fr_FR)
 end
 
 # Our tests attempt translating strings to French, so set the LANGUAGE
