@@ -5,6 +5,7 @@ uuid = "a6aca261-61b0-5b33-a99a-e9c977ffa089"
 PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 
 [compat]
+PyCall = "1"
 julia = "≥ 0.7.0"
 
 [extras]
