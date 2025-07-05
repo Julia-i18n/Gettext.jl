@@ -1,7 +1,5 @@
 using Gettext
 using Test
-using Formatting
-import Pkg
 
 # Our tests attempt translating strings to French, so set the LANGUAGE
 # etcetera accordingly.
@@ -42,13 +40,25 @@ try
     @test _"Unknown key" == "Unknown key"
 
     # Test ngettext
-    daystr(n) = format(ngettext("{1} day", "{1} days", n), n)
+    daystr(n) = replace(ngettext("%d day", "%d days", n), "%d"=>n)
     @test daystr(1) == "1 jour"
     @test daystr(3) == "3 jours"
 
     # Test dgettext and dngettext
-    @test dgettext("sample", "Hello, world!") == "Bonjour le monde !"
-    @test dngettext("sample", "{1} day", "{1} days", 1) == "{1} jour"
+    @test gettext("sample", "Hello, world!") == "Bonjour le monde !"
+    @test ngettext("sample", "%d day", "%d days", 1) == "%d jour"
+
+    @testset "pgettext" begin
+        # test pgettext
+        @test pgettext("test", "Julia is inspired") == "Julia est inspirée"
+        @test npgettext("test", "%d boat", "%d boats", 1) == "%d bateau"
+        @test npgettext("test", "%d boat", "%d boats", 2) == "%d bateaux"
+
+        # test untranslated strings
+        @test pgettext("test", "GNU gettext") == "GNU gettext"
+        @test npgettext("test", "%d frog", "%d frogs", 1) == "%d frog"
+        @test npgettext("test", "%d frog", "%d frogs", 2) == "%d frogs"
+    end
 
 finally
     # Set the language back to normal.
