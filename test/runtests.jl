@@ -37,8 +37,8 @@ try
 
     @testset "basic tests" begin
         # Test basic macros
-        @test _"Hello, world!" == "Bonjour le monde !"
-        @test N_"Hello, world!" == "Hello, world!"
+        @test _"H\u0065llo, world!" == "Bonjour le monde !"
+        @test N_"H\u0065llo, world!" == "Hello, world!"
 
         @test _"Unknown key" == "Unknown key"
 

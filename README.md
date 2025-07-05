@@ -29,6 +29,11 @@ In fact, such a sample program can be run from the toplevel directory of this re
     $ LANGUAGE=fr julia helloworld.jl
     Bonjour le monde !
 
+Note that Julia's standard backslash-escapes (like `\n` for newline or `\uXXXX` for U+XXXX) *are* supported in `_"..."` strings, but `$` interpolation is *not* supported.  The reason for the latter
+is that translated strings should generally not depend on runtime values, though for the rare exceptions
+you can call `gettext("...")` with an ordinary Julia string.  To substitute numerical quantities with
+singular and plural forms, see below.
+
 ## Singular/plural interpolation
 
 Gettext allows you to look up singular and plural forms of a string depending upon a runtime integer, using the `ngettext` function.
