@@ -62,11 +62,11 @@ function npgettext(domain::AbstractString, context::AbstractString, msgid::Abstr
 end
 
 macro __str(s)
-    :(gettext($(esc(s))))
+    :(gettext($(esc(unescape_string(s)))))
 end
 
 macro N__str(s)
-    :($(esc(s)))
+    :($(esc(unescape_string(s))))
 end
 
 export bindtextdomain, textdomain, gettext, pgettext, ngettext, npgettext, @__str, @N__str
