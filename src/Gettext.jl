@@ -31,10 +31,35 @@ function bindtextdomain(domain::AbstractString, dir_name::AbstractString)
 end
 
 gettext(msgid::AbstractString) = unsafe_string(ccall((:libintl_gettext,libintl), Cstring, (Cstring,), msgid))
-dgettext(domain::AbstractString, msgid::AbstractString) = unsafe_string(ccall((:libintl_dgettext,libintl), Cstring, (Cstring, Cstring,), domain, msgid))
+gettext(domain::AbstractString, msgid::AbstractString) = unsafe_string(ccall((:libintl_dgettext,libintl), Cstring, (Cstring, Cstring,), domain, msgid))
 
 ngettext(msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = unsafe_string(ccall((:libintl_ngettext,libintl), Cstring, (Cstring,Cstring,Culong), msgid, msgid_plural, n))
-dngettext(domain::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = unsafe_string(ccall((:libintl_dngettext,libintl), Cstring, (Cstring,Cstring,Cstring,Culong), domain, msgid, msgid_plural, n))
+ngettext(domain::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = unsafe_string(ccall((:libintl_dngettext,libintl), Cstring, (Cstring,Cstring,Cstring,Culong), domain, msgid, msgid_plural, n))
+
+# (TODO: can we make _msg_ctxt_id work at compile-time for string literals?)
+const CONTEXT_GLUE = '\004' # The separator between msgctxt and msgid in a .mo file.
+_msg_ctxt_id(context::AbstractString, msgid::AbstractString) = string(context, CONTEXT_GLUE, msgid)
+
+function pgettext(context::AbstractString, msgid::AbstractString)
+    msg_ctxt_id = _msg_ctxt_id(context, msgid)
+    text = gettext(msg_ctxt_id)
+    return text == msg_ctxt_id ? msgid : text
+end
+function pgettext(domain::AbstractString, context::AbstractString, msgid::AbstractString)
+    msg_ctxt_id = _msg_ctxt_id(context, msgid)
+    text = gettext(domain, msg_ctxt_id)
+    return text == msg_ctxt_id ? msgid : text
+end
+function npgettext(context::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, n::Integer)
+    msg_ctxt_id = _msg_ctxt_id(context, msgid)
+    text = ngettext(msg_ctxt_id, msgid_plural, n)
+    return text == msg_ctxt_id ? msgid : text
+end
+function npgettext(domain::AbstractString, context::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, n::Integer)
+    msg_ctxt_id = _msg_ctxt_id(context, msgid)
+    text = ngettext(domain, msg_ctxt_id, msgid_plural, n)
+    return text == msg_ctxt_id ? msgid : text
+end
 
 macro __str(s)
     :(gettext($(esc(s))))
@@ -44,6 +69,6 @@ macro N__str(s)
     :($(esc(s)))
 end
 
-export bindtextdomain, textdomain, gettext, dgettext, ngettext, dngettext, @__str, @N__str
+export bindtextdomain, textdomain, gettext, pgettext, ngettext, npgettext, @__str, @N__str
 
 end # module

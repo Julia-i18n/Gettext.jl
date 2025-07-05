@@ -11,7 +11,7 @@ by [Yggdrasil](https://github.com/JuliaPackaging/Yggdrasil); this is automatical
 
 ## Installation
 
-Within Julia, run `Pkg.update()` and then `Pkg.add("Gettext")`
+Within Julia, `import Pkg; Pkg.add("Gettext")`
 
 ## Usage
 
@@ -19,7 +19,7 @@ A simple string can be translated as follows:
 
     using Gettext
 
-    bindtextdomain("sample", "po/")
+    bindtextdomain("sample", "po")
     textdomain("sample")
 
     println(_"Hello, world!")
@@ -29,22 +29,25 @@ In fact, such a sample program can be run from the toplevel directory of this re
     $ LANGUAGE=fr julia helloworld.jl
     Bonjour le monde !
 
-## String interpolation
+## Singular/plural interpolation
 
-For string interpolation, you will need to use a runtime method (e.g. [Formatting.jl](https://github.com/lindahua/Formatting.jl)) rather than Julia's built-in compile-time interpolation syntax.  If using Formatting.jl, it probably makes sense to use the "Python" formatting style, as it allows the translations to have different argument orders than the original strings.  For example,
+Gettext allows you to look up singular and plural forms of a string depending upon a runtime integer, using the `ngettext` function.
+
+For example, you might use `"1 day"` for `n == 1` and `"$n days"` for `n > 1`.  To do this, however, it is important to substitute `n` into the string *after* looking up the translation, and to do this we typically use placeholder like `"%d"` for `n` in the translation string, as follows:
 
     using Gettext
-    using Formatting
 
-    bindtextdomain("sample", "po/")
+    bindtextdomain("sample", "po")
     textdomain("sample")
 
-    daystr(n) = format(ngettext("{1} day", "{1} days", n), n)
+    daystr(n) = replace(ngettext("%d day", "%d days", n), "%d"=>n)
 
     println(daystr(1))
     println(daystr(3))
 
-When run, this gives
+Here, we have simply used the built-in `replace` function to substitute the value of `n` for `"%d"` after the translation is obtained; one could also use the `Printf` standard library for more complex formatting, or you could also use Python-style format strings via the [Format.jl package](https://github.com/JuliaString/Format.jl).
+
+When run, this code gives:
 
     $ LANGUAGE=fr julia daystr.jl
     1 jour
