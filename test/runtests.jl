@@ -27,26 +27,30 @@ try
     end
 
     # Set up gettext
-    @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
-    bindtextdomain("sample", trdir)
-    textdomain("sample")
-    @test bindtextdomain("sample") == trdir
-    @test textdomain() == "sample"
+    @testset "setup" begin
+        @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
+        bindtextdomain("sample", trdir)
+        textdomain("sample")
+        @test bindtextdomain("sample") == trdir
+        @test textdomain() == "sample"
+    end
 
-    # Test basic macros
-    @test _"Hello, world!" == "Bonjour le monde !"
-    @test N_"Hello, world!" == "Hello, world!"
+    @testset "basic tests" begin
+        # Test basic macros
+        @test _"Hello, world!" == "Bonjour le monde !"
+        @test N_"Hello, world!" == "Hello, world!"
 
-    @test _"Unknown key" == "Unknown key"
+        @test _"Unknown key" == "Unknown key"
 
-    # Test ngettext
-    daystr(n) = replace(ngettext("%d day", "%d days", n), "%d"=>n)
-    @test daystr(1) == "1 jour"
-    @test daystr(3) == "3 jours"
+        # Test ngettext
+        daystr(n) = replace(ngettext("%d day", "%d days", n), "%d"=>n)
+        @test daystr(1) == "1 jour"
+        @test daystr(3) == "3 jours"
 
-    # Test dgettext and dngettext
-    @test gettext("sample", "Hello, world!") == "Bonjour le monde !"
-    @test ngettext("sample", "%d day", "%d days", 1) == "%d jour"
+        # Test dgettext and dngettext
+        @test gettext("sample", "Hello, world!") == "Bonjour le monde !"
+        @test ngettext("sample", "%d day", "%d days", 1) == "%d jour"
+    end
 
     @testset "pgettext" begin
         # test pgettext
