@@ -4,6 +4,11 @@
 
 An interface to the [gettext](http://www.gnu.org/software/gettext/manual/html_node/index.html) internationalization/translation interface.
 
+(This package calls the GNU `gettext` library directly from Julia, via the `GettextRuntime_jll` package compiled for Julia
+by [Yggdrasil](https://github.com/JuliaPackaging/Yggdrasil); this is automatically installed for you by Julia's
+[package manager](https://github.com/JuliaLang/Pkg.jl).  `gettext` is free/open-source software licensed under the
+[GNU LGPL](https://www.gnu.org/software/gettext/manual/html_node/GNU-LGPL.html).)
+
 ## Installation
 
 Within Julia, run `Pkg.update()` and then `Pkg.add("Gettext")`
@@ -44,7 +49,3 @@ When run, this gives
     $ LANGUAGE=fr julia daystr.jl
     1 jour
     3 jours
-
-## Status
-
-Currently this library relies on Python's built-in [gettext.py](https://github.com/python/cpython/blob/master/Lib/gettext.py) implementation via [PyCall](https://github.com/stevengj/PyCall.jl).  In the future, it may make sense to port this code into a Julia-native version (see [issue #1](https://github.com/Julia-i18n/Gettext.jl/issues/1)).

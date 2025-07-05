@@ -1,29 +1,49 @@
 module Gettext
 
-using PyCall
+using GettextRuntime_jll
 
-const gt = PyNULL()
-
-function __init__()
-    copy!(gt, pyimport("gettext"))
+textdomain() = unsafe_string(ccall((:libintl_textdomain,libintl), Cstring, (Ptr{UInt8},), C_NULL))
+function textdomain(domain::AbstractString)
+    # textdomain(domain) returns the domain as a string, but
+    # you are required to not free the result.  Might as well ignore it.
+    ccall((:libintl_textdomain,libintl), Cstring, (Cstring,), domain)
+    return domain
 end
 
-bindtextdomain(domain, localedir=nothing) = gt[:bindtextdomain](domain, localedir)
-textdomain(domain=nothing) = gt[:textdomain](domain)
+function bindtextdomain(domain::AbstractString)
+    @static if Sys.iswindows()
+        return unsafe_string(ccall((:libintl_wbindtextdomain,libintl), Cwstring, (Cstring, Ptr{Cwchar_t}), domain, C_NULL))
+    else
+        return unsafe_string(ccall((:libintl_bindtextdomain,libintl), Cstring, (Cstring, Ptr{UInt8},), domain, C_NULL))
+    end
+end
 
-gettext(message) = gt[:gettext](message)
-dgettext(domain, message) = gt[:dgettext](domain, message)
-ngettext(singular, plural, n) = gt[:ngettext](singular, plural, n)
-dngettext(domain, singular, plural, n) = gt[:dngettext](domain, singular, plural, n)
+function bindtextdomain(domain::AbstractString, dir_name::AbstractString)
+    # bintextdomain(domain, dir_name) returns the dir_name as a string, but
+    # you are required to not free the result.  Might as well ignore it.
+    @static if Sys.iswindows()
+        ccall((:libintl_wbindtextdomain,libintl), Cwstring, (Cstring,Cwstring), domain, dir_name)
+    else
+        ccall((:libintl_bindtextdomain,libintl), Cstring, (Cstring,Cstring), domain, dir_name)
+    end
+    ccall((:libintl_bind_textdomain_codeset,libintl), Cstring, (Cstring,Cstring), domain, "UTF-8")
+    return dir_name
+end
+
+gettext(msgid::AbstractString) = unsafe_string(ccall((:libintl_gettext,libintl), Cstring, (Cstring,), msgid))
+dgettext(domain::AbstractString, msgid::AbstractString) = unsafe_string(ccall((:libintl_dgettext,libintl), Cstring, (Cstring, Cstring,), domain, msgid))
+
+ngettext(msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = unsafe_string(ccall((:libintl_ngettext,libintl), Cstring, (Cstring,Cstring,Culong), msgid, msgid_plural, n))
+dngettext(domain::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, n::Integer) = unsafe_string(ccall((:libintl_dngettext,libintl), Cstring, (Cstring,Cstring,Cstring,Culong), domain, msgid, msgid_plural, n))
 
 macro __str(s)
-    gettext(s)
+    :(gettext($(esc(s))))
 end
 
 macro N__str(s)
-    s
+    :($(esc(s)))
 end
 
-export bindtextdomain, textdomain, gettext, lgettext, dgettext, dlgettext, ngettext, lngettext, dngettext, ldngettext, @__str, @N__str
+export bindtextdomain, textdomain, gettext, dgettext, ngettext, dngettext, @__str, @N__str
 
 end # module
