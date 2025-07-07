@@ -19,15 +19,16 @@ function bindtextdomain(domain::AbstractString)
 end
 
 function bindtextdomain(domain::AbstractString, dir_name::AbstractString)
-    # bintextdomain(domain, dir_name) returns the dir_name as a string, but
-    # you are required to not free the result.  Might as well ignore it.
+    abs_dir_name = abspath(dir_name) # gettext recommends against relative paths for bindtextdomain
     @static if Sys.iswindows()
-        ccall((:libintl_wbindtextdomain,libintl), Cwstring, (Cstring,Cwstring), domain, dir_name)
+        ccall((:libintl_wbindtextdomain,libintl), Cwstring, (Cstring,Cwstring), domain, abs_dir_name)
     else
-        ccall((:libintl_bindtextdomain,libintl), Cstring, (Cstring,Cstring), domain, dir_name)
+        ccall((:libintl_bindtextdomain,libintl), Cstring, (Cstring,Cstring), domain, abs_dir_name)
     end
     ccall((:libintl_bind_textdomain_codeset,libintl), Cstring, (Cstring,Cstring), domain, "UTF-8")
-    return dir_name
+    # bintextdomain(domain, dir_name) returns the dir_name as a string, but
+    # you are required to not free the result.  Might as well ignore it.
+    return abs_dir_name
 end
 
 gettext(msgid::AbstractString) = unsafe_string(ccall((:libintl_gettext,libintl), Cstring, (Cstring,), msgid))

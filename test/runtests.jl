@@ -31,7 +31,7 @@ try
         @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
         bindtextdomain("sample", trdir)
         textdomain("sample")
-        @test bindtextdomain("sample") == trdir
+        @test bindtextdomain("sample") == abspath(trdir)
         @test textdomain() == "sample"
     end
 
