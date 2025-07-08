@@ -15,6 +15,20 @@ old_language = get(ENV, "LANGUAGE", nothing)
 old_lang = get(ENV, "LANG", nothing)
 ENV["LANG"] = ENV["LANGUAGE"] = "fr_FR"
 
+module FooBad
+    using Gettext
+    foo() = _"Hello, world!" # error: undefined __GETTEXT_DOMAIN__
+end
+module Foo
+    using Gettext
+    const __GETTEXT_DOMAIN__ = "sample2"
+    function __init__()
+        bindtextdomain(__GETTEXT_DOMAIN__, joinpath(@__DIR__, "..", "po"))
+    end
+    foo() = _"Hello, world!"
+end
+import .FooBad, .Foo
+
 # set up a temporary Unicode pathname with a po file,
 # to make sure that we support Unicode directory names
 tmpdir = mktempdir()
@@ -43,25 +57,31 @@ try
         @test _"Unknown key" == "Unknown key"
 
         # Test ngettext
-        daystr(n) = replace(ngettext("%d day", "%d days", n), "%d"=>n)
+        daystr(n) = replace(@ngettext("%d day", "%d days", n), "%d"=>n)
         @test daystr(1) == "1 jour"
         @test daystr(3) == "3 jours"
 
         # Test dgettext and dngettext
         @test gettext("sample", "Hello, world!") == "Bonjour le monde !"
+        @test gettext("sample2", "Hello, world!") == "Salut tout le monde!"
         @test ngettext("sample", "%d day", "%d days", 1) == "%d jour"
     end
 
     @testset "pgettext" begin
         # test pgettext
-        @test pgettext("test", "Julia is inspired") == "Julia est inspirée"
-        @test npgettext("test", "%d boat", "%d boats", 1) == "%d bateau"
-        @test npgettext("test", "%d boat", "%d boats", 2) == "%d bateaux"
+        @test @pgettext("test", "Julia is inspired") == "Julia est inspirée"
+        @test @npgettext("test", "%d boat", "%d boats", 1) == "%d bateau"
+        @test @npgettext("test", "%d boat", "%d boats", 2) == "%d bateaux"
 
         # test untranslated strings
         @test pgettext("test", "GNU gettext") == "GNU gettext"
         @test npgettext("test", "%d frog", "%d frogs", 1) == "%d frog"
         @test npgettext("test", "%d frog", "%d frogs", 2) == "%d frogs"
+    end
+
+    @testset "modules" begin
+        @test_throws UndefVarError FooBad.foo()
+        @test Foo.foo() == "Salut tout le monde!"
     end
 
 finally
