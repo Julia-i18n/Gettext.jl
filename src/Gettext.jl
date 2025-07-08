@@ -63,6 +63,19 @@ function npgettext(domain::AbstractString, context::AbstractString, msgid::Abstr
 end
 
 ################################################################################################
+# simplify the common replace(ngettext(...), "%d"=>n) idiom by instead
+# allowing ngettext(singular, plural, "%d"=>n):
+
+ngettext(msgid::AbstractString, msgid_plural::AbstractString, nsub::Pair{<:AbstractString,<:Integer}) =
+    replace(ngettext(msgid, msgid_plural, nsub.second), nsub)
+ngettext(domain::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, nsub::Pair{<:AbstractString,<:Integer}) =
+    replace(ngettext(domain, msgid, msgid_plural, nsub.second), nsub)
+npgettext(context::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, nsub::Pair{<:AbstractString,<:Integer}) =
+    replace(npgettext(context, msgid, msgid_plural, nsub.second), nsub)
+npgettext(domain::AbstractString, context::AbstractString, msgid::AbstractString, msgid_plural::AbstractString, nsub::Pair{<:AbstractString,<:Integer}) =
+    replace(npgettext(domain, context, msgid, msgid_plural, nsub.second), nsub)
+
+################################################################################################
 # macro versions … not only are these shorter, but they also implicitly use the current module's
 # @__MODULE__().__GETTEXT_DOMAIN__ instead of the global domain (unless @__MODULE__() == Main).   This
 # is important to ensure that translations from different packages do not conflict.

@@ -26,9 +26,9 @@ module Foo
         bindtextdomain(__GETTEXT_DOMAIN__, joinpath(@__DIR__, "..", "po"))
     end
     hello() = _"Hello, world!"
-    daystr(n) = replace(@ngettext("%d day", "%d days", n), "%d"=>n)
+    daystr(n) = @ngettext("%d day", "%d days", "%d"=>n)
     julia() = @pgettext("test", "Julia is inspired")
-    boats(n) = @npgettext("test", "%d boat", "%d boats", n)
+    boats(n) = @npgettext("test", "%d boat", "%d boats", "%d"=>n)
 end
 import .FooBad, .Foo
 
@@ -60,26 +60,26 @@ try
         @test _"Unknown key" == "Unknown key"
 
         # Test ngettext
-        daystr(n) = replace(@ngettext("%d day", "%d days", n), "%d"=>n)
+        daystr(n) = @ngettext("%d day", "%d days", "%d"=>n)
         @test daystr(1) == "1 jour"
         @test daystr(3) == "3 jours"
 
         # Test dgettext and dngettext
         @test gettext("sample", "Hello, world!") == "Bonjour le monde !"
         @test gettext("sample2", "Hello, world!") == "Salut tout le monde!"
-        @test ngettext("sample", "%d day", "%d days", 1) == "%d jour"
+        @test ngettext("sample", "%d day", "%d days", "%d"=>1) == "1 jour"
     end
 
     @testset "pgettext" begin
         # test pgettext
         @test @pgettext("test", "Julia is inspired") == "Julia est inspirée"
-        @test @npgettext("test", "%d boat", "%d boats", 1) == "%d bateau"
-        @test @npgettext("test", "%d boat", "%d boats", 2) == "%d bateaux"
+        @test @npgettext("test", "%d boat", "%d boats", "%d"=>1) == "1 bateau"
+        @test @npgettext("test", "%d boat", "%d boats", "%d"=>2) == "2 bateaux"
 
         # test untranslated strings
         @test pgettext("test", "GNU gettext") == "GNU gettext"
-        @test npgettext("test", "%d frog", "%d frogs", 1) == "%d frog"
-        @test npgettext("test", "%d frog", "%d frogs", 2) == "%d frogs"
+        @test npgettext("test", "%d frog", "%d frogs", "%d"=>1) == "1 frog"
+        @test npgettext("test", "%d frog", "%d frogs", "%d"=>2) == "2 frogs"
     end
 
     @testset "modules" begin
@@ -88,8 +88,8 @@ try
         @test Foo.daystr(1) == "1 rotation de la terre"
         @test Foo.daystr(3) == "3 rotations de la terre"
         @test Foo.julia() == "Julia est ingénieux"
-        @test Foo.boats(1) == "%d vaisseau"
-        @test Foo.boats(2) == "%d vaisseaux"
+        @test Foo.boats(1) == "1 vaisseau"
+        @test Foo.boats(2) == "2 vaisseaux"
     end
 
 finally

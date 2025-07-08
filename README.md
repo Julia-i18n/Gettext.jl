@@ -91,19 +91,19 @@ using ..MyModule: __GETTEXT_DOMAIN__`
 
 Gettext allows you to look up singular and plural forms of a string depending upon a runtime integer, using the `ngettext` function.
 
-For example, you might use `"1 day"` for `n == 1` and `"$n days"` for `n > 1`.  To do this, however, it is important to substitute `n` into the string *after* looking up the translation, and to do this we typically use placeholder like `"%d"` for `n` in the translation string, as follows:
+For example, you might use `"1 day"` for `n == 1` and `"$n days"` for `n > 1`.  To do this, however, it is important to substitute `n` into the string *after* looking up the translation, and to do this we typically use a `printf`-style placeholder like `"%d"` for `n` in the translation string, as follows:
 
     using Gettext
 
     bindtextdomain("sample", "po")
     textdomain("sample")
 
-    daystr(n) = replace(ngettext("%d day", "%d days", n), "%d"=>n)
+    daystr(n) = ngettext("%d day", "%d days", "%d"=>n)
 
     println(daystr(1))
     println(daystr(3))
 
-Here, we have simply used the built-in `replace` function to substitute the value of `n` for `"%d"` after the translation is obtained; one could also use the `Printf` standard library for more complex formatting, or you could also use Python-style format strings via the [Format.jl package](https://github.com/JuliaString/Format.jl).
+Here, `ngettext` substitutes the value of `n` for `"%d"` after the translation is obtained.  If you want to do more complex formatting, you can instead call `ngettext("%d day", "%d days", n)`, which does no substitution (returning `"%d day"` or `"%d days"` depending on `n`).  In that case, one could use the `Printf` standard library, or perhaps Python-style format strings via the [Format.jl package](https://github.com/JuliaString/Format.jl).
 
 When run, this code gives:
 
