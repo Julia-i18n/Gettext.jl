@@ -8,3 +8,18 @@ msgstr ""
 
 msgid "Hello, world!"
 msgstr "Salut tout le monde!"
+
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d rotation de la terre"
+msgstr[1] "%d rotations de la terre"
+
+msgctxt "test"
+msgid "Julia is inspired"
+msgstr "Julia est ingénieux"
+
+msgctxt "test"
+msgid "%d boat"
+msgid_plural "%d boats"
+msgstr[0] "%d vaisseau"
+msgstr[1] "%d vaisseaux"

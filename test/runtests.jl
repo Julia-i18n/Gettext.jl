@@ -17,7 +17,7 @@ ENV["LANG"] = ENV["LANGUAGE"] = "fr_FR"
 
 module FooBad
     using Gettext
-    foo() = _"Hello, world!" # error: undefined __GETTEXT_DOMAIN__
+    hello() = _"Hello, world!" # error: undefined __GETTEXT_DOMAIN__
 end
 module Foo
     using Gettext
@@ -25,7 +25,10 @@ module Foo
     function __init__()
         bindtextdomain(__GETTEXT_DOMAIN__, joinpath(@__DIR__, "..", "po"))
     end
-    foo() = _"Hello, world!"
+    hello() = _"Hello, world!"
+    daystr(n) = replace(@ngettext("%d day", "%d days", n), "%d"=>n)
+    julia() = @pgettext("test", "Julia is inspired")
+    boats(n) = @npgettext("test", "%d boat", "%d boats", n)
 end
 import .FooBad, .Foo
 
@@ -34,7 +37,7 @@ import .FooBad, .Foo
 tmpdir = mktempdir()
 try
     trdir = mkpath(joinpath(tmpdir, "ünicøde🐨", "po"))
-    podir = mkpath(joinpath(trdir, "fr", "LC_MESSAGES"))
+    podir = mkpath(joinpath(trdir, "fr_FR", "LC_MESSAGES"))
     pkg_podir = joinpath(@__DIR__, "..", "po", "fr", "LC_MESSAGES")
     for file in ["sample.mo", "sample.po"]
         cp(joinpath(pkg_podir, file), joinpath(podir, file))
@@ -42,7 +45,7 @@ try
 
     # Set up gettext
     @testset "setup" begin
-        @test isfile(joinpath(trdir, "fr", "LC_MESSAGES", "sample.mo"))
+        @test isfile(joinpath(podir, "sample.mo"))
         bindtextdomain("sample", trdir)
         textdomain("sample")
         @test bindtextdomain("sample") == abspath(trdir)
@@ -80,8 +83,13 @@ try
     end
 
     @testset "modules" begin
-        @test_throws UndefVarError FooBad.foo()
-        @test Foo.foo() == "Salut tout le monde!"
+        @test_throws UndefVarError FooBad.hello()
+        @test Foo.hello() == "Salut tout le monde!"
+        @test Foo.daystr(1) == "1 rotation de la terre"
+        @test Foo.daystr(3) == "3 rotations de la terre"
+        @test Foo.julia() == "Julia est ingénieux"
+        @test Foo.boats(1) == "%d vaisseau"
+        @test Foo.boats(2) == "%d vaisseaux"
     end
 
 finally

@@ -64,7 +64,7 @@ end
 
 ################################################################################################
 # macro versions … not only are these shorter, but they also implicitly use the current module's
-# @__MODULE__().GETTEXT_DOMAIN instead of the global domain (unless @__MODULE__() == Main).   This
+# @__MODULE__().__GETTEXT_DOMAIN__ instead of the global domain (unless @__MODULE__() == Main).   This
 # is important to ensure that translations from different packages do not conflict.
 
 function _gettext_macro(gettext_func, gettext_args...)
