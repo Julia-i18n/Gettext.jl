@@ -17,12 +17,14 @@ Within Julia, `import Pkg; Pkg.add("Gettext")`
 
 A simple string can be translated as follows:
 
-    using Gettext
+```jl
+using Gettext
 
-    bindtextdomain("sample", "po")
-    textdomain("sample")
+bindtextdomain("sample", joinpath(dirname(pathof(Gettext)), "..", "po")
+textdomain("sample")
 
-    println(_"Hello, world!")
+println(_"Hello, world!")
+```
 
 In fact, such a sample program can be run as follows:
 
