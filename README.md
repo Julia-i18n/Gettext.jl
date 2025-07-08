@@ -20,7 +20,7 @@ A simple string can be translated as follows:
 ```jl
 using Gettext
 
-bindtextdomain("sample", joinpath(dirname(pathof(Gettext)), "..", "po")
+bindtextdomain("sample", joinpath(dirname(pathof(Gettext)), "..", "po"))
 textdomain("sample")
 
 println(_"Hello, world!")
