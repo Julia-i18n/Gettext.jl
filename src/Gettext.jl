@@ -62,14 +62,68 @@ function npgettext(domain::AbstractString, context::AbstractString, msgid::Abstr
     return text == msg_ctxt_id ? msgid : text
 end
 
-macro __str(s)
-    :(gettext($(esc(unescape_string(s)))))
+################################################################################################
+# macro versions … not only are these shorter, but they also implicitly use the current module's
+# @__MODULE__().__GETTEXT_DOMAIN__ instead of the global domain (unless @__MODULE__() == Main).   This
+# is important to ensure that translations from different packages do not conflict.
+
+function _gettext_macro(gettext_func, gettext_args...)
+    args = esc.(gettext_args)
+    quote
+        if @__MODULE__() === $Main
+            $gettext_func($(args...))
+        else
+            $gettext_func(@__MODULE__().__GETTEXT_DOMAIN__, $(args...))
+        end
+    end
 end
 
+"""
+    _"..."
+
+Returns the translation (if any) for the given literal string via [`gettext`](@ref).  The
+string can contain backslash escapes like ordinary Julia literal strings, but `\$` is
+treated literally (*not* used for interpolations): translation strings should not generally
+contain runtime values.
+
+In a module `!= Main`, this passes the module's `__GETTEXT_DOMAIN__` as the domain argument
+to `gettext` (whereas the global [`textdomain`](@ref) is used in the `Main` module).
+"""
+macro __str(s)
+    _gettext_macro(gettext, unescape_string(s))
+end
+
+macro gettext(msgid)
+    _gettext_macro(gettext, msgid)
+end
+
+macro ngettext(msgid, msgid_plural, n)
+    _gettext_macro(ngettext, msgid, msgid_plural, n)
+end
+
+macro pgettext(context, msgid)
+    _gettext_macro(pgettext, context, msgid)
+end
+
+macro npgettext(context, msgid, msgid_plural, n)
+    _gettext_macro(npgettext, context, msgid, msgid_plural, n)
+end
+
+"""
+    N_"..."
+
+"No-op" translation, equivalent to "...", for strings that do not require translation.
+
+(The main use of this macro is to explicitly mark strings to ensure that they are excluded
+from automated translation tools).
+"""
 macro N__str(s)
     :($(esc(unescape_string(s))))
 end
 
-export bindtextdomain, textdomain, gettext, pgettext, ngettext, npgettext, @__str, @N__str
+################################################################################################
+
+export bindtextdomain, textdomain, gettext, pgettext, ngettext, npgettext,
+       @__str, @N__str, @gettext, @ngettext, @pgettext, @npgettext
 
 end # module

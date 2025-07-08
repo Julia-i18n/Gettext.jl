@@ -34,6 +34,59 @@ is that translated strings should generally not depend on runtime values, though
 you can call `gettext("...")` with an ordinary Julia string.  To substitute numerical quantities with
 singular and plural forms, see below.
 
+## Using in modules/packages
+
+To use Gettext.jl in a package or module, it is undesirable to
+employ a single global `textdomain`, since that would cause
+different packages to interfere with one another.  Instead,
+you should define a unique domain name for your package,
+typically `"MyPackage-<uuid>"` where `<uuid>` is the unique UUID
+identifier of your package, and then pass that as the first
+argument to `gettext(...)` and similar functions.
+
+To help automate this, we provide a set of macros, `_"..."`, `@gettext`,
+and similar, which pass the global variable `__GETTEXT_DOMAIN__` from
+your module to the corresponding functions.  You should use it as follows:
+
+```jl
+module MyModule
+
+using Gettext
+const __GETTEXT_DOMAIN__ = "MyModule-<uuid>" # replace with package UUID
+function __init__()
+    bindtextdomain(__GETTEXT_DOMAIN__, joinpath(@__DIR__, "..", "po"))
+end
+
+# ...module implementation...
+
+end
+```
+
+This assumes that you have a top-level directory `po` in your module
+(similar to the Gettext.jl package) that is used to store translation
+(`.po`) files `po/<locale>/LC_MESSAGES/MyModule-<uuid>.po`, where
+`<locale>` is the standard locale identifier, e.g. `en` (English) or
+`en_GB` (English, Great Britain), and `MyModule-<uuid>` is your
+domain name from above.
+
+Then, in the module, you can simply use `_"..."`, `@gettext("...")`,
+`@ngettext(singular, plural, n)`, `@pgettext(context, "...")`, or
+`@npgettext(context, singular, plural, n)`, exactly as you would
+the corresponding functions.  Note that the `_"..."` macro *requires*
+you to define the `__GETTEXT_DOMAIN__` global variable in your module.
+
+If you use these variables in Julia's special `Main` module (e.g.
+an interactive environment like the REPL, or in a script), then
+they instead use the global `textdomain("...")` as in the examples
+of the previous section.
+
+If your module has submodules, they can employ the same domain as
+the parent module `MyModule`, via
+```jl
+using Gettext
+using ..MyModule: __GETTEXT_DOMAIN__`
+```
+
 ## Singular/plural interpolation
 
 Gettext allows you to look up singular and plural forms of a string depending upon a runtime integer, using the `ngettext` function.

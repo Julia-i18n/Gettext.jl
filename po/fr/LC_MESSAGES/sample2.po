@@ -1,0 +1,25 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Hello, world!"
+msgstr "Salut tout le monde!"
+
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d rotation de la terre"
+msgstr[1] "%d rotations de la terre"
+
+msgctxt "test"
+msgid "Julia is inspired"
+msgstr "Julia est ingénieux"
+
+msgctxt "test"
+msgid "%d boat"
+msgid_plural "%d boats"
+msgstr[0] "%d vaisseau"
+msgstr[1] "%d vaisseaux"
