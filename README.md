@@ -24,10 +24,12 @@ A simple string can be translated as follows:
 
     println(_"Hello, world!")
 
-In fact, such a sample program can be run from the toplevel directory of this repository as follows:
+In fact, such a sample program can be run as follows:
 
-    $ LANGUAGE=fr julia helloworld.jl
-    Bonjour le monde !
+```sh
+$ LANGUAGE=fr julia helloworld.jl
+Bonjour le monde !
+```
 
 Note that Julia's standard backslash-escapes (like `\n` for newline or `\uXXXX` for U+XXXX) *are* supported in `_"..."` strings, but `$` interpolation is *not* supported.  The reason for the latter
 is that translated strings should generally not depend on runtime values, though for the rare exceptions
@@ -93,20 +95,24 @@ Gettext allows you to look up singular and plural forms of a string depending up
 
 For example, you might use `"1 day"` for `n == 1` and `"$n days"` for `n > 1`.  To do this, however, it is important to substitute `n` into the string *after* looking up the translation, and to do this we typically use a `printf`-style placeholder like `"%d"` for `n` in the translation string, as follows:
 
-    using Gettext
+```jl
+using Gettext
 
-    bindtextdomain("sample", "po")
-    textdomain("sample")
+bindtextdomain("sample", joinpath(dirname(pathof(Gettext)), "..", "po"))
+textdomain("sample")
 
-    daystr(n) = ngettext("%d day", "%d days", "%d"=>n)
+daystr(n) = ngettext("%d day", "%d days", "%d"=>n)
 
-    println(daystr(1))
-    println(daystr(3))
+println(daystr(1))
+println(daystr(3))
+```
 
 Here, `ngettext` substitutes the value of `n` for `"%d"` after the translation is obtained.  If you want to do more complex formatting, you can instead call `ngettext("%d day", "%d days", n)`, which does no substitution (returning `"%d day"` or `"%d days"` depending on `n`).  In that case, one could use the `Printf` standard library, or perhaps Python-style format strings via the [Format.jl package](https://github.com/JuliaString/Format.jl).
 
 When run, this code gives:
 
-    $ LANGUAGE=fr julia daystr.jl
-    1 jour
-    3 jours
+```sh
+$ LANGUAGE=fr julia daystr.jl
+1 jour
+3 jours
+```
