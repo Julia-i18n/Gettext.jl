@@ -2,6 +2,10 @@
 [![CI](https://github.com/Julia-i18n/Gettext.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/Julia-i18n/Gettext.jl/actions/workflows/CI.yml?query=branch%3Amaster)
 [![Codecov](https://codecov.io/Julia-i18n/Gettext.jl/branch/master/graph/badge.svg?token=WsGRSymBmZ)](https://codecov.io/gh/Julia-i18n/Gettext.jl)
 
+Documentation:
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://Julia-i18n.github.io/Gettext.jl/stable)
+[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://Julia-i18n.github.io/Gettext.jl/dev)
+
 An interface to the [gettext](http://www.gnu.org/software/gettext/manual/html_node/index.html) internationalization/translation interface.
 
 (This package calls the GNU `gettext` library directly from Julia, via the `GettextRuntime_jll` package compiled for Julia
