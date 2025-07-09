@@ -2,7 +2,7 @@
 
 This package offers facilities for [internationalization and localization (i18n and l10n)](https://en.wikipedia.org/wiki/Internationalization_and_localization) of software in the Julia programming language, using the standard [`gettext`](https://en.wikipedia.org/wiki/Gettext) system.
 
-(This package calls the GNU `gettext` library directly from Julia, via the `GettextRuntime_jll` package compiled for Julia by [Yggdrasil](https://github.com/JuliaPackaging/Yggdrasil); this is automatically installed for you by Julia's [package manager](https://github.com/JuliaLang/Pkg.jl).  GNU `gettext` is free/open-source software licensed under the [GNU LGPL](https://www.gnu.org/software/gettext/manual/html_node/GNU-LGPL.html).)
+(This package calls GNU gettext's `libintl` library directly from Julia, via the `GettextRuntime_jll` package compiled for Julia by [Yggdrasil](https://github.com/JuliaPackaging/Yggdrasil); this is automatically installed for you by Julia's [package manager](https://github.com/JuliaLang/Pkg.jl).  GNU gettext is free/open-source software licensed under the [GNU LGPL](https://www.gnu.org/software/gettext/manual/html_node/GNU-LGPL.html).)
 
 ## Overview of internationalization and localization
 
