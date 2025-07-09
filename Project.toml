@@ -1,6 +1,6 @@
 name = "Gettext"
 uuid = "a6aca261-61b0-5b33-a99a-e9c977ffa089"
-version = "0.1.0"
+version = "1.0"
 
 [deps]
 GettextRuntime_jll = "b0724c58-0f36-5564-988d-3bb0596ebc4a"
