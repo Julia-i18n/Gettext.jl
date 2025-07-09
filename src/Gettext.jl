@@ -252,7 +252,7 @@ end
 """
     N_"..."
 
-"No-op" translation, equivalent to "...", for strings that do *not* require translation.
+"No-op" translation, equivalent to `"..."`, for strings that do *not* require translation.
 
 This string can contain backslash escapes like ordinary Julia literal strings, but `\$` is
 treated literally (*not* used for interpolations).
