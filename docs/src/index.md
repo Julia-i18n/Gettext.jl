@@ -10,7 +10,7 @@ This package offers facilities for [internationalization and localization (i18n 
 
 `gettext` is a popular system, dating back to 1990, for i18n and l10n of **messages** (strings) exposed to users in a program's interface: prompts, menu items, error messages, and so on.  This consists of two parts:
 
-* **i18n**: in your program, *any string that might need translation* should be wrapped in a call to a `gettext` function.   In Gettext.jl, this is typically accomplished by macros: For a typical string `"..."`, you simply replace it with [`_"..."`](@ref `@__str`) to make it translatable.  There are also more specialized macros, such as [`@ngettext`](@ref) for strings with runtime-dependent singular and plural forms.  See the [Internationalization (i18n) API](@ref) chapter.
+* **i18n**: in your program, *any string that might need translation* should be wrapped in a call to a `gettext` function.   In Gettext.jl, this is usually accomplished by macros: For a typical string `"..."`, you simply replace it with [`_"..."`](@ref `@__str`) to make it translatable.  There are also more specialized macros, such as [`@ngettext`](@ref) for strings with runtime-dependent singular and plural forms.  See the [Internationalization (i18n) API](@ref) chapter.
 
 * **l10n**: for any locale, one can create a `.po` file that lists the translations of strings in a human-readable text format — this format is designed so that non-programmers can easily contribute translations, and there are many software tools to help create `.po` files (either manually or via automated translation).   These `.po` files are then placed in a standardized directory for your package, and are converted to a binary `.mo` format with the [GNU `msgfmt` program](https://www.gnu.org/software/gettext/manual/html_node/Binaries.html).   At runtime, Gettext.jl then automatically looks up translations (if any) from the current locale (as indicated by the operating system) and substitutes them for strings like `_"..."` in your program.  See the [Localization (l10n) and PO files](@ref) chapter.
 
@@ -36,7 +36,7 @@ The Gettext.jl package comes with a sample `.po` translation file that includes 
 msgid "Hello, world!"
 msgstr "Bonjour le monde !"
 ```
-Here in the `sample.po` file, the `msgid` is the original string, and `msgstr` is the translation.  The `po` directory (typically at the top level of the package) is where a package's translations are placed, and `po/fr/LC_MESSAGES` contains translations for French-language (`fr`) locales in the default "category" `LC_MESSAGES`.  Inside this directory, `sample.po` contains the translations for the "domain" we called `"sample"` — there will typically be one such domain per independent package/component of a program (see [Gettext for modules and packages](@ref module_gettext)).   We need to tell Gettext.jl where to find the translations we are using, which we do via:
+Here, in the `sample.po` file, the `msgid` is the original string and `msgstr` is the translation.  The `po` directory (typically at the top level of the package) is where a package's translations are placed, and `po/fr/LC_MESSAGES` contains translations for French-language (`fr`) locales in the default "category" `LC_MESSAGES`.  Inside this directory, `sample.po` contains the translations for the "domain" we called `"sample"` — there will typically be one such domain per independent package/component of a program (see [Gettext for modules and packages](@ref module_gettext)).   We need to tell Gettext.jl where to find the translations we are using, which we could do here via:
 ```jl
 using Gettext
 bindtextdomain("sample", joinpath(dirname(pathof(Gettext)), "..", "po"))
@@ -47,9 +47,9 @@ println(_"Hello, world!")
 Here, [`bindtextdomain`](@ref) specifies the path of the `po` directory for
 a given domain.  For scripts (or interactive sessions) running in Julia's
 [`Main`](https://docs.julialang.org/en/v1/base/base/#Main) module, you then call
-[`textdomain`](@ref) to set the global domain.   (Inside packages and
+[`textdomain`](@ref) to set the global domain.   Inside packages and
 other modules, you instead define a [`__GETTEXT_DOMAIN__`](@ref module_gettext) global to set a package-specific domain, so that each package can have independent
-translations.)
+translations.
 
 Now, when you run the code, you will *still* see `"Hello, world!"` if you are in any
 non-French locale, but *French* locales will instead print `"Bonjour le monde !"`.
