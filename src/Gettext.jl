@@ -30,7 +30,7 @@ global domain.
 
 This domain is used for calls to low-level functions like [`gettext`](@ref)
 when no domain argument is passed, and also for macros like [`_"..."`](@ref `@__str`)
-and [`@getext`](@ref) when used from the `Main` module.
+and [`@gettext`](@ref) when used from the `Main` module.
 """
 textdomain
 
