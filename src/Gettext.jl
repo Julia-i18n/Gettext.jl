@@ -5,7 +5,7 @@ This module offers facilities for internationalization and localization (i18n an
 of software in the Julia programming language, using the standard `gettext` system.
 
 Essentially, `Gettext` allows the programmer to mark user-visible messages (strings) for translation,
-typically by simply replacing `"..."` strings with [`_"..."`](@ref `@__str`).
+typically by simply replacing `"..."` strings with [`_"..."`](@ref @__str).
 
 Then, translators can localize a Julia program or package by providing a list of translations in the
 standard `.po` format (a human-readable/editable file, supported by many software tools).
@@ -29,7 +29,7 @@ Set the global Gettext domain to `domain` (if supplied), returning the current
 global domain.
 
 This domain is used for calls to low-level functions like [`gettext`](@ref)
-when no domain argument is passed, and also for macros like [`_"..."`](@ref `@__str`)
+when no domain argument is passed, and also for macros like [`_"..."`](@ref @__str)
 and [`@gettext`](@ref) when used from the `Main` module.
 """
 textdomain

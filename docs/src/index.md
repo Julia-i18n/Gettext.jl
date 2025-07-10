@@ -10,7 +10,7 @@ This package offers facilities for [internationalization and localization (i18n 
 
 `gettext` is a popular system, dating back to 1990, for i18n and l10n of **messages** (strings) exposed to users in a program's interface: prompts, menu items, error messages, and so on.  This consists of two parts:
 
-* **i18n**: in your program, *any string that might need translation* should be wrapped in a call to a `gettext` function.   In Gettext.jl, this is usually accomplished by macros: For a typical string `"..."`, you simply replace it with [`_"..."`](@ref `@__str`) to make it translatable.  There are also more specialized macros, such as [`@ngettext`](@ref) for strings with runtime-dependent singular and plural forms.  See the [Internationalization (i18n) API](@ref) chapter.
+* **i18n**: in your program, *any string that might need translation* should be wrapped in a call to a `gettext` function.   In Gettext.jl, this is usually accomplished by macros: For a typical string `"..."`, you simply replace it with [`_"..."`](@ref @__str) to make it translatable.  There are also more specialized macros, such as [`@ngettext`](@ref) for strings with runtime-dependent singular and plural forms.  See the [Internationalization (i18n) API](@ref) chapter.
 
 * **l10n**: for any locale, one can create a `.po` file that lists the translations of strings in a human-readable text format — this format is designed so that non-programmers can easily contribute translations, and there are many software tools to help create `.po` files (either manually or via automated translation).   These `.po` files are then placed in a standardized directory for your package, and are converted to a binary `.mo` format with the [GNU `msgfmt` program](https://www.gnu.org/software/gettext/manual/html_node/Binaries.html).   At runtime, Gettext.jl then automatically looks up translations (if any) from the current locale (as indicated by the operating system) and substitutes them for strings like `_"..."` in your program.  See the [Localization (l10n) and PO files](@ref) chapter.
 
@@ -29,7 +29,7 @@ To i18n it, the first step is simply to change the code to:
 using Gettext
 println(_"Hello, world!")
 ```
-which tells Gettext.jl to translate the string `"Hello, world!"` for the current locale, if possible.   By default, if no translation is found, [`_"..."`](@ref `@__str`)  will simply return the original untranslated string, and the program will have the same output as before.
+which tells Gettext.jl to translate the string `"Hello, world!"` for the current locale, if possible.   By default, if no translation is found, [`_"..."`](@ref @__str)  will simply return the original untranslated string, and the program will have the same output as before.
 
 The Gettext.jl package comes with a sample `.po` translation file that includes a translation of `"Hello, world!"` into French.    In particular, the Gettext.jl package has a text file `po/fr/LC_MESSAGES/sample.po` (along with its binary-format equivalent `po/fr/LC_MESSAGES/sample.mo`) that includes the translation:
 ```
