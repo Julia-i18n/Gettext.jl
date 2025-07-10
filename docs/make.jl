@@ -9,6 +9,7 @@ makedocs(
         "Home" => "index.md",
         "Internationalization (i18n) API" => "i18n.md",
         "Localization (l10n) and PO files" => "l10n.md",
+        "Reference" => "reference.md",
     ],
 )
 
